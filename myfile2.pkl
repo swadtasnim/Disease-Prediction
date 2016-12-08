@@ -1,0 +1,14 @@
+(lp0
+S'Heart Attack'
+p1
+aS'Heart Failure'
+p2
+aS'High Blood Pressure'
+p3
+aS'Lung Cancer'
+p4
+aS'Dengue Fever'
+p5
+aS'Asthma'
+p6
+a.
