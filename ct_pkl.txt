@@ -1,0 +1,93 @@
+#basic thing
+import nltk
+from lxml import html
+import requests
+ur=["http://www.mayoclinic.org/diseases-conditions/heart-attack/basics/symptoms/con-20019520","http://www.mayoclinic.org/diseases-conditions/heart-failure/basics/symptoms/con-20029801","http://www.mayoclinic.org/diseases-conditions/high-blood-pressure/basics/symptoms/con-20019580","http://www.mayoclinic.org/diseases-conditions/lung-cancer/basics/symptoms/con-20025531","http://www.mayoclinic.org/diseases-conditions/dengue-fever/basics/symptoms/con-20032868","http://www.mayoclinic.org/diseases-conditions/asthma/basics/symptoms/con-20026992"]
+#print ur
+for s in ur:
+    page = requests.get(s)
+    tree = html.fromstring(page.content)
+#symptom
+    buyers = tree.xpath('//div[@id="main-content"]/ul/li/text()')
+#print buyers
+#description
+    t=tree.xpath('//div[@id="main-content"]/p/text()')
+    t=buyers+t
+
+
+
+
+    #t=unicode(t)
+
+        
+    
+    #print t
+
+    #stemming
+    wr=[]
+    from nltk.stem.snowball import SnowballStemmer
+    stemmer = SnowballStemmer("english")
+    w =[]
+    for o in t:
+        wr="  "
+        for v in o.split():
+            print "v : ",v.encode('ascii','ignore')
+            w.append(stemmer.stem(v.encode('ascii','ignore')))
+            print "w: ",w
+            wr=" ".join(w)
+
+    t=wr
+
+#file=open("temp.txt","w")
+#for n in t:
+        #file.write(n)
+
+    #file.close()
+    #t = open("temp.txt","r")
+
+    #lines = t.readlines()
+    #t.close()
+
+    
+    
+    #clean = ''.join(l.replace('\n','') for l in open('temp.txt')) 
+    #print 'clean: ',clean
+    #clean=unicode(clean)
+    #t=clean
+    t=",".join(t)
+
+#removing puctuation
+    import string
+     
+    w=[]
+    for o in t:
+        w.append(o.encode('ascii','ignore').translate(None, string.punctuation))
+    t=w
+
+#removing newlines
+    clean=[]
+    for n in t:
+        clean.append(n.replace("\n"," "))
+
+
+    t=clean
+
+#test file writing
+    with open("test.txt", "a") as myfile:
+         for o in t:
+             myfile.write(o.encode('ascii','ignore'))
+         myfile.write("\n")  
+
+    myfile.close()
+
+#Pkl File
+
+    t = open("test.txt","r")
+
+    lines = t.readlines()
+    t.close()
+
+    import pickle
+    output = open('myfile.pkl', 'wb')
+    pickle.dump(lines, output)
+    output.close()
